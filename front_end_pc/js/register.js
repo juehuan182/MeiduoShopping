@@ -4,24 +4,24 @@ var vm = new Vue({
         error_name: false,
         error_password: false,
         error_check_password: false,
-        error_phone: false,
+        error_email: false,
         error_allow: false,
-        error_sms_code: false,
+        error_email_code: false,
 
         username: '',
         password: '',
         password2: '',
-        mobile: '',
-        sms_code: '',
+        email: '',
+        email_code: '',
         allow: true,
 
         send_flag: false,
-        sms_code_tip: '获取短信验证码',
-        sms_code_error_tip: '短信验证码错误',
+        email_code_tip: '获取邮箱验证码',
+        email_code_error_tip: '邮箱验证码错误',
         host: host,
     },
-    mounted: function () {
-        this.generate_image_code();
+    mounted: function () { //mounted:在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
+        //this.generate_image_code();
     },
     methods: {
         check_username: function () {
@@ -32,9 +32,9 @@ var vm = new Vue({
                 this.error_name = false;
             }
 
-            // 检查重名
+            // 检查重名，向后台发起请求
             if (this.error_name == false) {
-                axios.get(this.host + '/usernames/' + this.username + '/count/', {
+                axios.get(this.host + '/users/usernames/' + this.username + '/count/', {
                     responseType: 'json'
                 })
                     .then(response => {
@@ -65,24 +65,24 @@ var vm = new Vue({
                 this.error_check_password = false;
             }
         },
-        check_phone: function () {
-            var re = /^1[345789]\d{9}$/;
-            if (re.test(this.mobile)) {
-                this.error_phone = false;
+        check_email: function () {
+            var re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+                    
+            if (re.test(this.email)) {
+                this.error_email = false;
             } else {
-                this.error_phone = true;
+                this.error_email = true;
             }
 
-            if (this.error_phone == false) {
-                axios.get(this.host + '/mobiles/' + this.mobile + '/count/', {
+            if (this.error_email == false) {
+                axios.get(this.host + '/users/emails/' + this.email + '/count/', {
                     responseType: 'json'
                 })
                     .then(response => {
                         if (response.data.count > 0) {
-                            this.error_phone_message = '手机号已存在';
-                            this.error_phone = true;
+                            this.error_email_message = '邮箱已存在';
                         } else {
-                            this.error_phone = false;
+                            this.error_email = false;
                         }
                     })
                     .catch(error => {
@@ -90,11 +90,11 @@ var vm = new Vue({
                     })
             }
         },
-        check_sms_code: function () {
-            if (!this.sms_code) {
-                this.error_sms_code = true;
+        check_email_code: function () {
+            if (!this.email_code) {
+                this.error_email_code = true;
             } else {
-                this.error_sms_code = false;
+                this.error_email_code = false;
             }
         },
         check_allow: function () {
@@ -109,22 +109,22 @@ var vm = new Vue({
             this.check_username();
             this.check_pwd();
             this.check_cpwd();
-            this.check_phone();
-            this.check_sms_code();
+            this.check_email();
+            this.check_email_code();
             this.check_allow();
 
             if (this.error_name == false &&
                 this.error_password == false &&
                 this.error_check_password == false &&
-                this.error_phone == false &&
-                this.error_sms_code == false &&
+                this.error_email == false &&
+                this.error_email_code == false &&
                 this.error_allow == false) {
                 axios.post(this.host + '/users/', {
                     username: this.username,
                     password: this.password,
                     password2: this.password2,
-                    mobile: this.mobile,
-                    sms_code: this.sms_code,
+                    email: this.email,
+                    email_code: this.email_code,
                     allow: this.allow.toString()
                 }, {
                     responseType: 'json'
@@ -141,11 +141,11 @@ var vm = new Vue({
                     .catch(error => {
                         if (error.response.status == 400) {
                             if ('non_field_errors' in error.response.data) {
-                                this.error_sms_code_message = error.response.data.non_field_errors[0];
+                                this.error_email_code_message = error.response.data.non_field_errors[0];
                             } else {
-                                this.error_sms_code_message = '数据有误';
+                                this.error_email_code_message = '数据有误';
                             }
-                            this.error_sms_code = true;
+                            this.error_email_code = true;
                         } else {
                             console.log(error.response.data);
                         }
@@ -165,31 +165,35 @@ var vm = new Vue({
             });
             return uuid;
         },
-        //发送短信验证码
-        send_sms_code: function () {
+        //发送邮件验证码
+        send_email_code: function () {
             if (this.send_flag == true) {
                 return;
             }
             this.send_flag = true;
 
-            this.check_phone();
+            this.check_email();
 
-            if (this.error_phone) {
+            if (this.error_email) {
                 this.send_flag = false;
                 return;
             }
-
-            axios.get('http://127.0.0.1:8000/sms_code/' + this.mobile + '/')
+           
+            axios.get('http://127.0.0.1:8000/verifications/email_codes/' + this.email + '/',{
+                params: {
+                    send_type: 'register'
+                }
+            })
                 .then(response => {
                     var num = 60;
                     var t = setInterval(function () {
                         if (num == 1) {
                             clearInterval(t);
-                            vm.sms_code_tip = '获取短信验证码';
+                            vm.email_code_tip = '获取短信验证码';
                             vm.send_flag = false;
                         } else {
                             num -= 1;
-                            vm.sms_code_tip = '再过 ' + num + ' 秒后发送';
+                            vm.email_code_tip = '再过 ' + num + ' 秒后发送';
                         }
                     }, 1000);
                 })

@@ -699,10 +699,10 @@ html,body{height:100%}
 .reg_form li{height:70px;}
 .reg_form li label{width:75px;height:40px;line-height:40px;float:left;font-size:14px;color:#a8a8a8;text-align:right;padding-right:10px;}
 .reg_form li input{width:288px;height:38px;border:1px solid #e0e0e0;float:left;outline:none;text-indent:10px;background-color:#f8f8f8}
-.reg_form li .msg_input,.reg_form li .msg_input{
+.reg_form li .email_input,.reg_form li .email_input{
 	width:170px;
 }
-.reg_form .get_msg_code{
+.reg_form .get_email_code {
 	float: left;
 	width:108px;
 	height:38px;
@@ -712,7 +712,7 @@ html,body{height:100%}
 	margin-left:10px;
 	color:#333;
 }
-.reg_form .get_msg_code:hover{
+.reg_form .get_email_code:hover {
 	color:#f80000;
 }
 .reg_form .pic_code{
