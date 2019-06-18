@@ -1,1 +1,1 @@
-var host='http://api.meiduo.com:8000';
+var host='http://www.qmpython.com:8003';

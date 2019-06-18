@@ -6,7 +6,7 @@ from . import send_email
 logger = logging.Logger('django')
 
 # 创建任务函数
-@app.task
+@app.task(name='send_email_code')
 def task_send_email_code(email, email_code, send_type):  
     """
     发送邮件验证码的任务
@@ -16,7 +16,6 @@ def task_send_email_code(email, email_code, send_type):
     """
     try:
         send_status = send_email.send_email_code(email, email_code, send_type)
-        print(send_status)
     except Exception as e:
         logger.error("发送邮件验证码[异常][ email: %s, message: %s ]" % (email, e))
 

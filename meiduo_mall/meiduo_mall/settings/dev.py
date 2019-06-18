@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os,sys
+import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,11 +40,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'users',
-    'corsheaders', # CORS跨域问题
+    'oauth',
+    'corsheaders',  # CORS跨域问题
 ]
 
 
+# 使用自定义的用户模型
 AUTH_USER_MODEL = 'users.User'
+
+# 使用自定义的用户验证逻辑
+AUTHENTICATION_BACKENDS = [
+    'users.utils.UserBackend',
+]
+
+
 
 MIDDLEWARE = [
     # 注意这个放在其他中间件的最上面
@@ -91,7 +101,7 @@ WSGI_APPLICATION = 'meiduo_mall.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '127.0.0.1',  # 数据库主机
+        'HOST': 'localhost',  # 数据库主机
         'PORT': 3306,  # 数据库端口
         'USER': 'meiduo',  # 数据库用户名
         'PASSWORD': 'meiduo',  # 数据库用户密码
@@ -102,21 +112,21 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/0",
+        "LOCATION": "redis://127.0.0.1:6379/10",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     "session": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": "redis://127.0.0.1:6379/11",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     "verify_codes":{
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
+        "LOCATION": "redis://127.0.0.1:6379/12",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -217,7 +227,7 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'meiduo_mall.utils.exceptions.exception_handler',
         # 身份验证
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication', # 添加jwt验证类
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
@@ -225,20 +235,49 @@ REST_FRAMEWORK = {
 
 import datetime
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1), # 指明token的有效期
+    # 返回属性设置
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'users.utils.jwt_response_payload_handler',
+
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 指明token的有效期
+
 }
+
 
 
 
 
 # CORS
 CORS_ORIGIN_WHITELIST = (  # 凡是出现在白名单中的域名，都可以访问后端接口
-    'http://127.0.0.1:8080',
-    'http://localhost:8080',
-    'http://www.meiduo.com:8080',
-    'http://api.meiduo.com:8000'
+    'http://127.0.0.1:8003',
+    'http://localhost:8003',
+    'http://www.qmpython.com:8001',
+    'http://www.qmpython.com:8003',
 )
 CORS_ALLOW_CREDENTIALS = True  # 指明在跨域访问中，后端是否支持对cookie的操作。
+# CORS_ORIGIN_ALLOW_ALL = True
+#
+# CORS_ALLOW_METHODS = (
+#     'DELETE',
+#     'GET',
+#     'OPTIONS',
+#     'PATCH',
+#     'POST',
+#     'PUT',
+#     'VIEW',
+# )
+#
+# CORS_ALLOW_HEADERS = (
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# )
 
 
 
@@ -256,3 +295,13 @@ EMAIL_HOST_PASSWORD = "ktxduqebuirngfif"
 EMAIL_USE_SSL = True  # 第三种配置方式
 EMAIL_FROM = "qmpython@qq.com"
 
+
+# 第三方快速登录
+
+# QQ登录参数
+QQ_CLIENT_ID = '101518870'
+QQ_CLIENT_SECRET = 'd80cc8d2e656acbd8b90cf6a71c58f38'
+QQ_REDIRECT_URI = 'http://www.qmpython.com:8001/qq_oauth_callback.html'
+
+# 第三方应用授权后，进行账号绑定的时间
+SAVE_APP_USER_TOKEN_EXPIRES = 600

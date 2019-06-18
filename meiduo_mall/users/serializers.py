@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
     email_code = serializers.CharField(max_length=6, min_length=6, write_only=True)
     allow = serializers.CharField(write_only=True)
 
-    token = serializers.CharField(label='登录状态token', read_only=True)  # 增加token字段
+    token = serializers.CharField(label='登录状态token', read_only=True)  # 定义只输出的token属性
 
     class Meta:
         model = User
@@ -50,11 +50,11 @@ class UserSerializer(serializers.ModelSerializer):
     '''
     def validate_email(self, email):
             """
-            验证手机好格式
+            验证邮箱格式
             :param value: 
             :return: 
             """
-            if not re.match(r'?P<email>^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', email):
+            if not re.match(r'\w+@\w+.\w+', email):
                 raise serializers.ValidationError("邮箱格式不正确")
             return email
 
@@ -86,10 +86,10 @@ class UserSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('两次密码不一致')
 
             # 获取发送的验证码
-            real_email_code = EmailCodeView.checkEmailCode(attrs['email']) # 调用类方法
+            real_email_code = EmailCodeView.checkEmailCode(attrs['email'])  # 调用类方法
             if real_email_code is None:
                 raise serializers.ValidationError('邮箱验证码过期')
-            if real_email_code != attrs['email']:
+            if real_email_code != attrs['email_code'].lower():
                 raise serializers.ValidationError('短信验证码错误')
 
             return attrs
@@ -126,11 +126,12 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
 
         # 补充生成记录登录状态的token
+        # 在创建use对象的时候手动生成token
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
-        user.token = token
+        user.token = token  # 为user添加token属性才能输出到客户端
 
 
         # 将保存数据返回

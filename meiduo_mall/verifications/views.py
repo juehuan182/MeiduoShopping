@@ -26,22 +26,24 @@ class EmailCodeView(APIView):
             :param mobile: 路径传参的手机号
             :return:       
         """
-        send_type = request.query_params.dict().get('send_type')
-        print(send_type)
+        send_type = request.query_params.get('send_type')
 
         # 1. 创建redis链接
         redis_conn = get_redis_connection(alias='verify_codes')
 
         # 2.判断60m内是否不允许重复发送短信
-        email_flag_key = 'email_flag_key_%s'%email
+        email_flag_key = 'email_flag_key_{}'.format(email)
         email_flag = redis_conn.get(email_flag_key)
+        print(email_flag)
         if email_flag:
-            return Response({'message':'发送邮件过于频繁'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': '发送邮件过于频繁'}, status=status.HTTP_400_BAD_REQUEST)
 
         # 3. 生成验证码
         if send_type == 'register':
             code_len = 6
         elif send_type == 'resetpwd':
+            code_len = 6
+        elif send_type == 'bindAccount':
             code_len = 6
         else:
             code_len = 4
@@ -51,7 +53,8 @@ class EmailCodeView(APIView):
 
         logger.info(email_code)
 
-        email_code_key = 'email_code_key_%s'%email
+        email_code_key = 'email_code_key_{}'.format(email)
+        print(email_code_key)
 
         # 发送邮件，调用发送邮件接口
         #from celery_tasks.email import send_email
@@ -83,11 +86,9 @@ class EmailCodeView(APIView):
             pl.execute()
         except Exception as e:
             logger.debug("redis 执行出现异常:{}".format(e))
-            return Response({'message':'redis 执行出现异常:{}'.format(e)})
+            return Response({'message': 'redis 执行出现异常:{}'.format(e)})
 
-        return Response({'message':'OK'})
-
-
+        return Response({'message': 'OK'})
 
 
     @classmethod
@@ -100,10 +101,10 @@ class EmailCodeView(APIView):
         """
         # 建立redis链接
         redis_conn = get_redis_connection(alias='verify_codes')
-        email_code_key = 'email_code_key_%s'%email
-
-        real_email = redis_conn.get(email_code_key)            
-        return real_email.decode()
+        email_code_key = 'email_code_key_{}'.format(email)
+        print(email_code_key)
+        real_email = redis_conn.get(email_code_key).decode('utf-8')
+        return real_email
 
 
     # 在python中的random.randint(a,b)用于生成一个指定范围内的整数，生成的随机数n: a <= n <= b

@@ -15,7 +15,6 @@ logger = logging.getLogger('django')
 # 定义一个发送邮件
 def send_email_code(email, email_code, send_type):
 
-    print('send_email_code coming')
 
     subject = ''  # 主题
     text_message = ''  # 正文
@@ -23,14 +22,20 @@ def send_email_code(email, email_code, send_type):
 
     if send_type == 'register':
         # print('register')
-        subject = u'全民python-注册验证码'
-        text_message = u'【全民python】您的注册验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！'.format(email_code)  # text格式
-        html_message = u'【全民python】您的注册验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！'.format(email_code)  # html格式方便点击链接
+        subject = u'美多商城-注册验证码'
+        text_message = u'【美多商城】您的注册验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！'.format(email_code)  # text格式
+        html_message = u'【美多商城】您的注册验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！'.format(email_code)  # html格式方便点击链接
 
     elif send_type == 'resetpwd':
-        subject = u'全民python-找回密码验证码'
-        text_message = u'【全民python】找回登录密码的验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！'.format(email_code)
-        html_message = u'<p>【全民python】找回登录密码的验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！</p>'.format(email_code)
+        subject = u'美多商城-找回密码验证码'
+        text_message = u'【美多商城】找回登录密码的验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！'.format(email_code)
+        html_message = u'<p>【美多商城】找回登录密码的验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！</p>'.format(email_code)
+
+    elif send_type == 'bindAccount':
+        subject = u'美多商城-绑定第三方账号验证码'
+        text_message = u'【美多商城】绑定第三方账号的验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！'.format(email_code)
+        html_message = u'<p>【美多商城】绑定第三方账号的验证码：{0}，请勿将此验证码告知他人，若非本人操作，请联系或者忽略，3分钟内有效！</p>'.format(email_code)
+
     else:
         subject = ''
         text_message = ''

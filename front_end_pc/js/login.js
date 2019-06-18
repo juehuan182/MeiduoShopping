@@ -41,15 +41,17 @@ var vm = new Vue({
             this.check_pwd();
 
             if (this.error_username == false && this.error_pwd == false) {
-                axios.post(this.host + '/authorizations/', {
+                axios.post(this.host + '/users/authorizations/', {
+                    // 请求参数
                     username: this.username,
                     password: this.password
                 }, {
                     responseType: 'json',
-                    withCredentials: true
+                    withCredentials: true // 前端防跨域问题
                 })
                     .then(response => {
                         // 使用浏览器本地存储保存token
+
                         if (this.remember) {
                             // 记住登录
                             sessionStorage.clear();
@@ -66,6 +68,8 @@ var vm = new Vue({
 
                         // 跳转页面
                         var return_url = this.get_query_string('next');
+                        console.log(return_url);
+
                         if (!return_url) {
                             return_url = '/index.html';
                         }
@@ -83,15 +87,16 @@ var vm = new Vue({
         },
         // qq登录
         qq_login: function () {
-            var next = this.get_query_string('next') || '/';
+            var next = this.get_query_string('next') || '/';   // 获取当前next参数
             axios.get(this.host + '/oauth/qq/authorization/?next=' + next, {
                 responseType: 'json'
             })
                 .then(response => {
-                    location.href = response.data.login_url;
+                    location.href = response.data.login_url;  // 跳转到QQ登录地址
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    console.log(error);
+
                 })
         }
     }

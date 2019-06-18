@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 
-
 from .models import User
 from .serializers import UserSerializer
 # Create your views here.
@@ -63,4 +62,5 @@ class UserView(CreateAPIView): # 相当于(CreateModelMixin, GenericAPIView)
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 

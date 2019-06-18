@@ -35,9 +35,11 @@ var vm = new Vue({
             // 检查重名，向后台发起请求
             if (this.error_name == false) {
                 axios.get(this.host + '/users/usernames/' + this.username + '/count/', {
+                    // withCredentials: true,
                     responseType: 'json'
                 })
                     .then(response => {
+                        console.log(response);
                         if (response.data.count > 0) {
                             this.error_name_message = '用户名已存在';
                             this.error_name = true;
@@ -46,6 +48,8 @@ var vm = new Vue({
                         }
                     })
                     .catch(error => {
+                        console.log(error);
+
                         console.log(error.response.data);
                     })
             }
@@ -147,7 +151,7 @@ var vm = new Vue({
                             }
                             this.error_email_code = true;
                         } else {
-                            console.log(error.response.data);
+                            console.log(error);
                         }
                     })
             }
@@ -179,7 +183,7 @@ var vm = new Vue({
                 return;
             }
            
-            axios.get('http://127.0.0.1:8000/verifications/email_codes/' + this.email + '/',{
+            axios.get(this.host + '/verifications/email_codes/' + this.email + '/',{
                 params: {
                     send_type: 'register'
                 }
@@ -189,7 +193,7 @@ var vm = new Vue({
                     var t = setInterval(function () {
                         if (num == 1) {
                             clearInterval(t);
-                            vm.email_code_tip = '获取短信验证码';
+                            vm.email_code_tip = '获取邮箱验证码';
                             vm.send_flag = false;
                         } else {
                             num -= 1;
