@@ -26,7 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields =  ("id","username", "email", "password", "password2", "email_code", "allow", "token")
+        fields = ("id","username", "email", "password", "password2", "email_code", "allow", "token")
         extra_kwargs = {
              # 对模型类中的字段添加规则
             'password': {
@@ -139,3 +139,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
+class UserDetailSerializer(serializers.Serializer):
+    """
+    用户详细信息序列化器
+    """
+    id = serializers.IntegerField(read_only=True) # 用户id，只输出
+    username = serializers.CharField(min_length=5, max_length=20, error_messages={'min_length': "用户名不能少于5个字符",
+                                                                                  'max_length': "用户名不能大于20个字符",})
+
+    email = serializers.EmailField(read_only=True)

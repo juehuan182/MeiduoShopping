@@ -30,12 +30,12 @@ var vm = new Vue({
         is_set_title: [],
         input_title: ''
     },
-    mounted: function () {
+    mounted: function () {  // 打开页面首先加载省份数据
         axios.get(this.host + '/areas/', {
             responseType: 'json'
         })
             .then(response => {
-                this.provinces = response.data;
+                this.provinces = response.data; // 返回数组
             })
             .catch(error => {
                 alert(error.response.data);
@@ -62,10 +62,10 @@ var vm = new Vue({
                 }
             })
     },
-    watch: {
+    watch: {  // watch 监听对象变化，这里监听form_address.province_id值的变化
         'form_address.province_id': function () {
             if (this.form_address.province_id) {
-                axios.get(this.host + '/areas/' + this.form_address.province_id + '/', {
+                axios.get(this.host + '/areas/subs/' + this.form_address.province_id + '/', {
                     responseType: 'json'
                 })
                     .then(response => {

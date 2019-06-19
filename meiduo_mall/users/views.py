@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserDetailSerializer
 # Create your views here.
 
 class CheckUsername(APIView):
@@ -62,5 +62,24 @@ class UserView(CreateAPIView): # 相当于(CreateModelMixin, GenericAPIView)
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserDetailView(RetrieveAPIView):  # RetrieveAPIView 详情视图扩展
+    """用户详情"""
+    queryset = User.objects.all()   # 获取查询集
+    serializer_class = UserDetailSerializer  # 序列化类
+    from rest_framework.permissions import IsAuthenticated
+    permission_classes = [IsAuthenticated]   # 局部设置权限认证
+
+    def get_object(self):
+        """
+        重写get_object,不使用pk值返回user
+        因为查看某个对象具体详情，默认URL是需要配置类似
+            path('users/<int:pk>/', UserDetailView.as_view(), name='user_detail'),
+            但是这里我们没有使用Pk
+        :return:
+        """
+        return self.request.user
+
 
 

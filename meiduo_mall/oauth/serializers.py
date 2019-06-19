@@ -14,7 +14,7 @@ class OAuthSerializer(serializers.ModelSerializer):
     """第三方账户绑定的序列化器"""
     # 指定模型类中没有的字段
     email_code = serializers.CharField(max_length=6, min_length=6, write_only=True)
-    access_token = serializers.CharField(write_only=True)  # 反序列化输入，可能要进行校验之类的。注意这个是我们自己生成的。
+    bind_token = serializers.CharField(write_only=True)  # 反序列化输入，可能要进行校验之类的。注意这个是我们自己生成的。
     login_type = serializers.CharField(write_only=True)
 
     token = serializers.CharField(label='登录状态token', read_only=True)  # 定义只输出的token属性
@@ -22,10 +22,13 @@ class OAuthSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('password', 'email', 'username', 'email_code', 'token', 'access_token', 'login_type', 'user_id')
+        fields = ('password', 'email', 'username', 'email_code', 'token', 'bind_token', 'login_type', 'user_id')
         extra_kwargs = {
             'username': {
-                'read_only': True
+                'read_only': True  # 只是输出
+            },
+            'email': {
+                'write_only': True  # 只是输入，不输出
             },
             'password': {
                 'write_only': True,
@@ -55,10 +58,10 @@ class OAuthSerializer(serializers.ModelSerializer):
         :return:
         """
         # 校验access_token
-        access_token = attrs['access_token']
-        openid = OAuthBase.check_save_user_token(access_token)
+        bind_token = attrs['bind_token']
+        openid = OAuthBase.check_save_user_token(bind_token)
         if not openid:
-            raise serializers.ValidationError('无效的access_token')
+            raise serializers.ValidationError('无效的bind_token')
 
         attrs['openid'] = openid
 

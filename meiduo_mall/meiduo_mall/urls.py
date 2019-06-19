@@ -25,6 +25,8 @@ urlpatterns = [
     path('users/', include('users.urls', namespace='users')),
     path('verifications/', include('verifications.urls', namespace='verifications')),
 
+    path('areas/', include('areas.urls', namespace='areas')),
+
     # 第三方登录app
     path('oauth/', include('oauth.urls', namespace='oauth')),
 

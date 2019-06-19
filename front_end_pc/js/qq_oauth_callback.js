@@ -16,7 +16,7 @@ var vm = new Vue({
         password: '',
         email: '',
         email_code: '',
-        access_token: ''
+        bind_token: ''
     },
     mounted: function () {  // 在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
         // 从路径中获取qq重定向返回的code
@@ -36,7 +36,8 @@ var vm = new Vue({
                 location.href = state;  // 跳转到state
             } else {
                 // 用户未绑定
-                this.access_token = response.data.access_token;
+                alert(response.data.bind_token);
+                this.bind_token = response.data.bind_token;
                 this.is_show_waiting = false;
             }
         }).catch(error => {
@@ -156,7 +157,7 @@ var vm = new Vue({
                     password: this.password,
                     email: this.email,
                     email_code: this.email_code,
-                    access_token: this.access_token,
+                    bind_token: this.bind_token,
                     login_type: '1'
                 }, {
                     responseType: 'json',

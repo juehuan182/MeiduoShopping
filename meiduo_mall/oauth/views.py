@@ -90,9 +90,9 @@ class QQAuthView(APIView):
 
         except OAuthUser.DoesNotExist:
             # 用户第一次使用QQ登录，未绑定，显示绑定界面
-            token = OAuth_QQ.generate_save_user_token(openid)
+            bind_token = OAuth_QQ.generate_save_user_token(openid)
 
-            return Response({'access_token': token})
+            return Response({'bind_token': bind_token})
 
         else:
             # 7. 绑定过，则直接登录成功
