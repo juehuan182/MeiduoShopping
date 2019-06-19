@@ -62,10 +62,10 @@ var vm = new Vue({
                 }
             })
     },
-    watch: {  // watch 监听对象变化，这里监听form_address.province_id值的变化
+    watch: {  // watch 监听对象变化，这里监听form_address.province_id即省份选项框值的变化
         'form_address.province_id': function () {
             if (this.form_address.province_id) {
-                axios.get(this.host + '/areas/subs/' + this.form_address.province_id + '/', {
+                axios.get(this.host + '/areas/' + this.form_address.province_id + '/', {
                     responseType: 'json'
                 })
                     .then(response => {
@@ -77,7 +77,7 @@ var vm = new Vue({
                     });
             }
         },
-        'form_address.city_id': function () {
+        'form_address.city_id': function () { // 监听城市变化
             if (this.form_address.city_id) {
                 axios.get(this.host + '/areas/' + this.form_address.city_id + '/', {
                     responseType: 'json'
@@ -196,7 +196,7 @@ var vm = new Vue({
                             this.is_show_edit = false;
                         })
                         .catch(error => {
-                            alert(error.response.data.detail || error.response.data.message);
+                            // alert(error.response.data.detail || error.response.data.message);
                         })
                 }
             }

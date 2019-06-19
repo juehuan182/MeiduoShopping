@@ -1,10 +1,17 @@
 from django.urls import path
-from django.urls import re_path
 
-from .views import ProvinceView
+from rest_framework.routers import DefaultRouter
 
+from .views import AreasViewSet
 
 app_name = 'areas'
+
+# 视图集的路由生成
+router = DefaultRouter()
+router.register('', AreasViewSet, base_name='areas')
+
 urlpatterns = [
-      path('', ProvinceView.as_view(), name='area_province'),
+
 ]
+
+urlpatterns += router.urls

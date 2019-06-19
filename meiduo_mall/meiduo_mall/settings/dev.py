@@ -245,7 +245,13 @@ JWT_AUTH = {
 }
 
 
-
+# DRF 扩展
+REST_FRAMEWORK_EXTENSIONS = {
+    # 缓存有效时间, 单位是秒
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60,
+    # 缓存存储
+    'DEFAULT_USE_CACHE': 'default', # cache 缓存使用的Django缓存后端（即CACHES配置中的键名称）,这里使用的是default这个
+}
 
 
 # CORS
