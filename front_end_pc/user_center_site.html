@@ -142,13 +142,13 @@
                         <span v-show="error_mobile" class="error_tip">手机信息有误</span>
                     </div>
                     <div class="form_group">
-                        <label>固定电话：</label>
-                        <input v-model="form_address.tel" type="text" name="">
-                    </div>
-                    <div class="form_group">
-                        <label>邮箱：</label>
+                        <label>*邮箱：</label>
                         <input v-model="form_address.email" @blur="check_email" type="text" name="">
                         <span v-show="error_email" class="error_tip">邮箱信息有误</span>
+                    </div>
+                    <div class="form_group">
+                        <label>固定电话：</label>
+                        <input v-model="form_address.tel" type="text" name="">
                     </div>
                     <input @click="save_address" type="button" name="" value="保 存" class="info_submit">
                     <input @click="is_show_edit=false" type="reset" name="" value="取 消" class="info_submit info_reset">

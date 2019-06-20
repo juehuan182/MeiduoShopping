@@ -2,7 +2,7 @@ import re
 
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
-from .models import User
+from .models import User, Address
 
 from verifications.views import EmailCodeView
 
@@ -148,3 +148,44 @@ class UserDetailSerializer(serializers.Serializer):
                                                                                   'max_length': "用户名不能大于20个字符",})
 
     email = serializers.EmailField(read_only=True)
+
+
+
+class AddressSerializer(serializers.Serializer):
+    """
+    收货地址序列化器
+    """
+    province_id = serializers.IntegerField(label='省ID', required=True, write_only=True)  # write_only 输入用来校验
+    city_id = serializers.IntegerField(label='市ID', required=True, write_only=True)
+    district_id = serializers.IntegerField(label='区ID', required=True, write_only=True)
+
+    # 序列化输出
+    province = serializers.StringRelatedField(read_only=True)  # read_only 用于输出
+    city = serializers.StringRelatedField(read_only=True)  # StringRelatedField 字符串形式关系字段
+    district = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Address
+        exclude = ['user', 'is_deleted', 'create_time', 'update_time']
+
+    def validate_mobile(self, value):
+        """
+        验证手机号格式
+        :param value:
+        :return:
+        """
+        if not re.match(r'1[3-9]\d{9}$', value):
+            raise serializers.ValidationError('手机号格式错误')
+
+        return value
+
+    def create(self, validated_data):
+        """
+        重写父类方法
+        需要在验证后的数据添加user
+        :param validated_data:
+        :return:
+        """
+        # 获取user,把user添加到字典中
+        validated_data['user'] = self.context['request'].user
+        return Address.objects.create(**validated_data)

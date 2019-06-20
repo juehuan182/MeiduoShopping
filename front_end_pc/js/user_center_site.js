@@ -165,10 +165,10 @@ var vm = new Vue({
             if (this.error_receiver || this.error_place || this.error_mobile || this.error_email || !this.form_address.province_id || !this.form_address.city_id || !this.form_address.district_id) {
                 alert('信息填写有误！');
             } else {
-                this.form_address.title = this.form_address.receiver;
+                this.form_address.title = this.form_address.receiver; // 地址标题(同收件人)
                 if (this.editing_address_index === '') {
                     // 新增地址
-                    axios.post(this.host + '/addresses/', this.form_address, {
+                    axios.post(this.host + '/users/addresses/', this.form_address, {
                         headers: {
                             'Authorization': 'JWT ' + this.token
                         },
