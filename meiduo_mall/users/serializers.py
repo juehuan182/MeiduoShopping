@@ -26,7 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id","username", "email", "password", "password2", "email_code", "allow", "token")
+        fields = ("id", "username", "email", "password", "password2", "email_code", "allow", "token")
         extra_kwargs = {
              # 对模型类中的字段添加规则
             'password': {
@@ -151,7 +151,7 @@ class UserDetailSerializer(serializers.Serializer):
 
 
 
-class AddressSerializer(serializers.Serializer):
+class AddressSerializer(serializers.ModelSerializer):
     """
     收货地址序列化器
     """
@@ -188,4 +188,19 @@ class AddressSerializer(serializers.Serializer):
         """
         # 获取user,把user添加到字典中
         validated_data['user'] = self.context['request'].user
+
         return Address.objects.create(**validated_data)
+
+
+
+class AddressTitleSerializer(serializers.Serializer):
+    """
+    地址标题
+    """
+    title = serializers.CharField(max_length=20, label='地址名称', error_messages={'max_length': '标题不能超过20个字符'})
+
+    # 修改
+    def update(self, instance, validated_data):  # 通过Serializer来序列化，需要重写create和update方法，这里只是用来修改标题，所以重新更新发发即可。
+        instance.title = validated_data.get('title', instance.title)
+        instance.save()
+        return instance

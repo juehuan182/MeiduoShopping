@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4371bdc-8085-4cc9-8d51-d582ee2fe524" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/user_center_site.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/user_center_site.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user_center_site.html" beforeDir="false" afterPath="$PROJECT_DIR$/user_center_site.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../meiduo_mall/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../meiduo_mall/areas/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/areas/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../meiduo_mall/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/users/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../meiduo_mall/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/users/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/users/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../meiduo_mall/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../项目文档整理/2-用户部分.md" beforeDir="false" afterPath="$PROJECT_DIR$/../项目文档整理/2-用户部分.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,7 +23,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/user_center_info.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1122">
+            <state relative-caret-position="622">
               <caret line="66" selection-start-line="66" selection-end-line="66" />
             </state>
           </provider>
@@ -30,26 +32,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/user_center_info.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="41" selection-start-line="18" selection-start-column="41" selection-end-line="18" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/user_center_site.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="74" column="54" selection-start-line="74" selection-start-column="49" selection-end-line="74" selection-end-column="54" />
+            <state relative-caret-position="289">
+              <caret line="23" column="18" lean-forward="true" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/user_center_site.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="421">
+              <caret line="133" column="26" lean-forward="true" selection-start-line="133" selection-start-column="26" selection-end-line="133" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/user_center_site.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="170" column="50" selection-start-line="170" selection-start-column="50" selection-end-line="170" selection-end-column="50" />
+            <state relative-caret-position="242">
+              <caret line="126" column="36" lean-forward="true" selection-start-line="126" selection-start-column="36" selection-end-line="126" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -65,7 +67,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>发送</find>
       <find>注册</find>
       <find>check_email_code</find>
       <find>d</find>
@@ -79,11 +80,23 @@
       <find>username</find>
       <find>show_add</find>
       <find>site_top_con</find>
-      <find>form_address</find>
       <find>check_mobile</find>
-      <find>save_address</find>
       <find>title</find>
+      <find>×</find>
+      <find>编辑</find>
+      <find>province_id</find>
+      <find>default_address_id</find>
+      <find>form_address.email</find>
+      <find>form_address</find>
+      <find>addresses</find>
+      <find>form_address.place</find>
+      <find>默认地址</find>
+      <find>del_address</find>
+      <find>province_id</find>
       <find>editing_address_index</find>
+      <find>is_show_edit</find>
+      <find>show_edit</find>
+      <find>save_address</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -103,16 +116,16 @@
         <option value="$PROJECT_DIR$/js/qq_oauth_callback.js" />
         <option value="$PROJECT_DIR$/js/user_center_info.js" />
         <option value="$PROJECT_DIR$/user_center_info.html" />
-        <option value="$PROJECT_DIR$/user_center_site.html" />
         <option value="$PROJECT_DIR$/js/user_center_site.js" />
+        <option value="$PROJECT_DIR$/user_center_site.html" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="323" />
-    <option name="y" value="521" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="326" />
+    <option name="y" value="35" />
     <option name="width" value="1940" />
-    <option name="height" value="825" />
+    <option name="height" value="1103" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -122,7 +135,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -139,6 +151,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -180,20 +193,22 @@
       <workItem from="1560923888337" duration="10346000" />
       <workItem from="1560948727566" duration="3277000" />
       <workItem from="1561036798920" duration="2250000" />
+      <workItem from="1561082552041" duration="4263000" />
+      <workItem from="1561094685575" duration="14510000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45767000" />
+    <option name="totallyTimeSpent" value="64540000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18766756" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1930295" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -201,7 +216,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" anchor="bottom" id="File Transfer" order="9" visible="true" weight="0.19263457" />
+      <window_info anchor="bottom" id="File Transfer" order="9" weight="0.2733711" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
@@ -297,29 +312,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/user_center_info.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1122">
+        <state relative-caret-position="622">
           <caret line="66" selection-start-line="66" selection-end-line="66" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/user_center_info.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="41" selection-start-line="18" selection-start-column="41" selection-end-line="18" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user_center_site.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="74" column="54" selection-start-line="74" selection-start-column="49" selection-end-line="74" selection-end-column="54" />
+        <state relative-caret-position="289">
+          <caret line="23" column="18" lean-forward="true" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/user_center_site.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="170" column="50" selection-start-line="170" selection-start-column="50" selection-end-line="170" selection-end-column="50" />
+        <state relative-caret-position="242">
+          <caret line="126" column="36" lean-forward="true" selection-start-line="126" selection-start-column="36" selection-end-line="126" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user_center_site.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="133" column="26" lean-forward="true" selection-start-line="133" selection-start-column="26" selection-end-line="133" selection-end-column="26" />
         </state>
       </provider>
     </entry>

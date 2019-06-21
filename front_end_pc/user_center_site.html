@@ -124,6 +124,7 @@
                         <select v-model="form_address.province_id">  <!--省份province-->
                             <option v-for="province in provinces" v-bind:value="province.id">{{ province.name }}</option>
                         </select>
+
                         <select v-model="form_address.city_id"> <!--城市city-->
                             <option v-for="city in cities" v-bind:value="city.id">{{ city.name }}</option>
                         </select>

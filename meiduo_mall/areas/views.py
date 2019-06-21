@@ -26,6 +26,10 @@ class AreasViewSet(CacheResponseMixin, ReadOnlyModelViewSet): # CacheResponseMix
     # 当进行GET,无pk时,查询所有省信息,使用AreaSerializer
     # 当进行GET,pk时,查询指定pk的数据并输出子地区信息,使用SubAreaSerializer
     def get_serializer_class(self):
+        """
+        动态选择序列化类，区分列表数据和详细
+        :return:
+        """
         if self.action == 'list':  # 在视图集中，我们可以通过action对象属性来获取当前请求视图集时的action动作是哪个。
             return AreaSerializer   # 列表视图使用
         else:

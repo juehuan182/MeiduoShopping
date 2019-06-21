@@ -42,14 +42,16 @@ var vm = new Vue({
             });
 
         // 补充获取地址数据的请求
-        axios.get(this.host + '/addresses/', {
+        axios.get(this.host + '/users/addresses/', {
             headers: {
                 'Authorization': 'JWT ' + this.token
             },
             responseType: 'json'
         })
             .then(response => {
+                // console.log(response.data.addresses);
                 this.addresses = response.data.addresses;
+                // console.log(response.data.addresses);
                 this.limit = response.data.limit;
                 this.default_address_id = response.data.default_address_id;
             })
@@ -121,10 +123,13 @@ var vm = new Vue({
         },
         // 展示编辑地址界面
         show_edit: function (index) {
+            console.log(index);
             this.clear_all_errors();
             this.editing_address_index = index;
             // 只获取数据，防止修改form_address影响到addresses数据
             this.form_address = JSON.parse(JSON.stringify(this.addresses[index]));
+            console.log(this.form_address);
+
             this.is_show_edit = true;
         },
         check_receiver: function () {
@@ -150,13 +155,11 @@ var vm = new Vue({
             }
         },
         check_email: function () {
-            if (this.form_address.email) {
                 var re = /^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
                 if (re.test(this.form_address.email)) {
                     this.error_email = false;
                 } else {
                     this.error_email = true;
-                }
             }
         },
 
@@ -175,7 +178,7 @@ var vm = new Vue({
                         responseType: 'json'
                     })
                         .then(response => {
-                            // 将新地址添加大数组头部
+                            // 将新地址添加大数组头部，即新增的放在开头处
                             this.addresses.splice(0, 0, response.data);
                             this.is_show_edit = false;
                         })
@@ -185,7 +188,7 @@ var vm = new Vue({
                 } else {
 
                     // 修改地址
-                    axios.put(this.host + '/addresses/' + this.addresses[this.editing_address_index].id + '/', this.form_address, {
+                    axios.put(this.host + '/users/addresses/' + this.addresses[this.editing_address_index].id + '/', this.form_address, {
                         headers: {
                             'Authorization': 'JWT ' + this.token
                         },
@@ -203,7 +206,7 @@ var vm = new Vue({
         },
         // 删除地址
         del_address: function (index) {
-            axios.delete(this.host + '/addresses/' + this.addresses[index].id + '/', {
+            axios.delete(this.host + '/users/addresses/' + this.addresses[index].id + '/', {
                 headers: {
                     'Authorization': 'JWT ' + this.token
                 },
@@ -219,7 +222,7 @@ var vm = new Vue({
         },
         // 设置默认地址
         set_default: function (index) {
-            axios.put(this.host + '/addresses/' + this.addresses[index].id + '/status/', {}, {
+            axios.put(this.host + '/users/addresses/' + this.addresses[index].id + '/status/', {}, {
                 headers: {
                     'Authorization': 'JWT ' + this.token
                 },
@@ -245,7 +248,7 @@ var vm = new Vue({
             if (!this.input_title) {
                 alert("请填写标题后再保存！");
             } else {
-                axios.put(this.host + '/addresses/' + this.addresses[index].id + '/title/', {
+                axios.put(this.host + '/users/addresses/' + this.addresses[index].id + '/title/', {
                     title: this.input_title
                 }, {
                     headers: {
