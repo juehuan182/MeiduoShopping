@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'users',
     'areas',
     'oauth',
+    'goods',
+    'contents',
     'corsheaders',  # CORS跨域问题
 ]
 
