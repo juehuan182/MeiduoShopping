@@ -370,77 +370,452 @@ sudo docker load -i ./ubuntu.tar
 
 # python学习之美多商城(十三):商品部分:FastDFS、Docker安装FastDFS、FastDFS客户端与自定义文件存储系统
 
+## 一、什么是FastDFS
+
+FastDFS 是用 c 语言编写的一款开源的分布式文件系统。FastDFS 为互联网量身定制， 充分考虑了冗余备份、负载均衡、线性扩容等机制，并注重高可用、高性能等指标，使用 FastDFS 很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB < file_size <500MB）为载体的在线服务。 
+
+FastDFS 系统有三个角色：**跟踪服务器(Tracker Server)**、**存储服务器(Storage Server)**和**客户端(Client)**。 
+
+客户端请求Tracker server进行文件上传、下载，通过Tracker server调度最终由Storage server完成文件上传、下载。
+
+* Tracker server 作用是负载均衡和调度，通过Tracker server在文件上传时可以根据一些策略找到Storage server提供文件上传服务。可以将tracker称为追踪服务器或调度服务器。负责管理所有的 storage server和 group，每个 storage 在启动后会连接 Tracker，告知自己所属 group 等信息，并保持周期性心跳。 
+* Storage server作用是文件存储，客户端上传的文件最终存储在Storage服务器上，Storage server没有实现自己的文件系统，而是利用操作系统的文件系统来管理文件。可以将storage称为存储服务器。以 group 为单位，每个 group 内可以有多台 storage server，数据互为备份。 
+* Client：客户端，上传下载数据的服务器，也就是我们自己的项目所部署在的服务器。
+
+![1561431060276](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1561431060276.png)
 
 
 
+## 二、文件上传流程:
 
-### 镜像下载：
+![1561432722715](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1561432722715.png)
+
+
+
+FastDFS向使用者提供基本文件访问接口，比如upload、download、append、delete等，以客户端库的方式提供给用户使用。 
+Storage Server会定期的向Tracker Server发送自己的存储信息。当Tracker Server Cluster中的Tracker Server不止一个时，各个Tracker之间的关系是对等的，所以客户端上传时可以选择任意一个Tracker。 
+
+当Tracker收到客户端上传文件的请求时，会为该文件分配一个可以存储文件的group，当选定了group后就要决定给客户端分配group中的哪一个storage server。当分配好storage server后，客户端向storage发送写文件请求，storage将会为文件分配一个数据存储目录。然后为文件分配一个fileid，最后根据以上的信息生成文件名存储文件。
+
+客户端上传文件后存储服务器将文件ID返回给客户端,此文件ID用于访问文件的索引信息。文件索引信息包括:组名, 虚拟磁盘路径， 数据两级目录，文件名。
+
+![1561432926881](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1561432926881.png)
+
+组名 : 文件上传后所在的storage组名称, 在文件上传成功后有storage服务器返回,需要客户端自行保存。
+虚拟磁盘路径 : storage配置;额虚拟路径, 与磁盘选项store_path*对应。如果配置了store_path0则是M00, 如果配置了store_path1则是M哦, 以此类推。
+数据两级目录 ：storage 服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据 文件。
+
+文件名 ：与文件上传时不同。是由存储服务器根据特定信息生成，文件名包含:源存储 服务器 IP 地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。
+
+## 三、简易FastDFS构建:
+
+![1561433192841](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1561433192841.png)
+
+
+
+## 四、Docker安装FastDFS
+
+### 1. 镜像下载：
+
+可以利用已有的FastDFS Docker镜像来运行Fast DFS。
+
+~~~
 docker image pull delron/fastdfs
+~~~
 
-![1559919788213](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1559919788213.png)
+### 2. 运行tracker
 
-
-
-加载好镜像后，就可以开启运行FastDFS的tracker和storage了。
-
-### 镜像运行
-
-#### 运行tracker
-
-执行如下命令开启tracker服务:
-
-~~~linux
+~~~
 sudo docker run -dti --network=host --name tracker -v /var/fdfs/tracker:/var/fdfs delron/fastdfs tracker
 ~~~
 
-我们将fastDFS tracker运行目录映射到本机的 /var/fdfs/tracker目录中。执行如下命令查看tracker是否运行起来。
+> 我们将fastDFS tracker运行目录映射到本机的 /var/fdfs/tracker目录中。
 
- docker container ls
+* 查看tracker是否运行起来
+
+~~~
+docker container ls
+~~~
 
 ![1559920312355](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1559920312355.png)
 
-如果想停止tracker服务，可以执行如下命令：
+> status一列为UP则是运行了。
 
-sudo docker container stop tracker
+* 如果想停止tracker服务
 
-停止后，重新运行tracker，可以执行如下命令：
+  ~~~
+  docker container stop tracker
+  ~~~
 
-sudo docker container start tracker
+  
 
-#### 运行storage
+* 停止后，重新运行tracker
 
-开启storage服务:
+  ~~~
+  sudo docker container start tracker
+  ~~~
+
+  
+
+### 3. 运行storage
+
+开启storage服务：
 
 ```python
 sudo docker run -dti --network=host --name storage -e TRACKER_SERVER=172.18.140.24:22122 -v /var/fdfs/storage:/var/fdfs delron/fastdfs storage
 ```
 
-- TRACKER_SERVER=本机的IP地址：22122 本机的ip地址不要使用127.0.0.1
+> TRACKER_SERVER=本机的IP地址：22122 本机的ip地址不要使用127.0.0.1。
+>
+> 通过在Ubuntu里面`ifconfig`查看本机IP地址：
+>
+> ![1559921079314](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1559921079314.png)
+>
+> 我们将fastDFS storage运行目录映射到本机的/var/fdfs/storage目录。
 
-  通过在Ubuntu里面`ifconfig`查看本机IP地址
+* 查看storage是否运行起来
 
-  ![1559921079314](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1559921079314.png)
-
-- 我们将fastDFS storage运行目录映射到本机的/var/fdfs/storage目录
-  执行如下命令查看storage是否运行起来
-
-  查看storage是否运行起来：
-
+  ~~~
   sudo docker container ps
+  ~~~
 
-  停止storage服务，可以执行如下命令：
+* 停止storage服务
 
+  ~~~
   sudo docker container stop storage
+  ~~~
 
-  重新运行storage：
+* 重新运行storage
 
+  ~~~
   sudo docker container start storage
+  ~~~
 
-  **注意：如果无法重新运行，可以删除/var/fdfs/storage/data目录下的fdfs_storaged.pid 文件，然后重新运行storage。**
-
-### FastDFS的python客户端
-
-#### 安装提供的fdfs_client-py-master.zip文件到虚拟环境中
+**注意：如果无法重新运行，可以删除/var/fdfs/storage/data目录下的fdfs_storaged.pid 文件，然后重新运行storage。**
 
 
+
+## 五、FastDFS客户端与自定义文件存储系统
+
+### 1. FastDFS的python客户端
+
+python版本的FastDFS客户端使用说明参考:<https://github.com/jefforeilly/fdfs_client-py>
+
+#### 1.1 安装
+
+安装提供的`fdfs_client-py-master.zip`文件到虚拟环境中
+
+1）进入虚拟环境；
+
+2）进入`fdfs_client-py-master.zip`所在目录；
+
+3) 执行命令安装
+
+~~~
+pip install fdfs_client-py-master.zip
+
+pip install mutagen
+pip isntall requests
+~~~
+
+#### 1.2 使用
+
+使用FastDFS客户端，需要有配置文件。我们在meiduo_mall/utils目录下新建fastdfs目录，将提供的client.conf配置文件放到这个目录中。需要修改一下client.conf配置文件
+
+~~~
+connect_timeout=30
+network_timeout=60
+base_path=util/fastdfs/logs/meiduo    # FastDFS客户端存放日志文件的目录
+tracker_server=运行tracker服务的机器ip:22122   # 运行tracker服务的机器ip:22122
+log_level=info
+use_connection_pool = false
+connection_pool_max_idle_time = 3600
+load_fdfs_parameters_from_tracker=false
+use_storage_id = false
+storage_ids_filename = storage_ids.conf
+http.tracker_server_port=80
+~~~
+
+上传文件需要先创建fdfs_client.client.Fdfs_client的对象,并指明配置文件，如:
+
+~~~
+from fdfs_client.client import Fdfs_client
+client = Fdfs_client("meiduo_mall/utils/fastdfs/client.conf")
+~~~
+
+通过创建的客户端对象执行上传文件的方法:
+
+~~~
+client.upload_by_filename(文件名)
+或
+client.upload_by_buffer(文件bytes数据)
+~~~
+
+如：
+
+~~~
+>>> ret = client.upload_by_filename('/Users/delron/Desktop/1.png')
+getting connection
+<fdfs_client.connection.Connection object at 0x1098d4cc0>
+<fdfs_client.fdfs_protol.Tracker_header object at 0x1098d4908>
+>>> ret
+{'Group name': 'group1', 'Remote file_id': 'group1/M00/00/02/CtM3BVr-k6SACjAIAAJctR1ennA809.png', 'Status': 'Upload successed.', 'Local file name': '/Users/delron/Desktop/1.png', 'Uploaded size': '151.00KB', 'Storage IP': '10.211.55.5'}
+
+~~~
+
+Remote file_id 即为FastDFS保存的文件的路径，可以通过网站域名和这个路径拼接成下载路径。
+
+
+
+### 2. 自定义Django文件存储系统
+
+Django是自带文件存储系统的，但是默认的文件存储到本地，在本项目中，需要将文件保存到FastDFS服务器上，所以需要自定义文件存储系统。
+
+1）需要继承自django.core.files.storage.Storage
+
+2)  支持Django不带任何参数来实例化存储类,也就是说任何设置应该从配置django.conf.settings中获取
+
+3)  存储类中必须实现\_open()和\_save()方法，以及任何后续使用中可能用到的其他方法。
+
+* _open(name, mode = ‘rb’)
+  被Storage.open()调用,在打开文件时被调用
+* save(name, content)
+  被Storage.save()调用,name是传入的文件名,content是Django接收到的文件内容,该方法需要将content文件内容保存。Django会将该方法的返回值保存到数据库中对应的文件字段,也就是说该方法应该返回要保存在数据库中的文件名信息。
+* exists(name)
+  如果名为name的文件在文件系统中存在,按返回True,否则返回Flase
+* url(name)
+  返回文件的完整访问URL
+* delete(name)
+  删除name文件
+* listdir(path)
+  列出指定路径的文件
+* size(name)
+  返回name文件的总大小
+
+**注意** :并不是这些方法全部都要实现，可以省略用不到的方法
+
+~~~python
+from fdfs_client.client import Fdfs_client
+from django.conf import settings
+from django.core.files.storage import Storage
+
+
+class FastDFSStorage(Storage):
+    """
+    定义FastDFS客户端
+    """
+    def __init__(self, base_url=None, client_conf=None):
+        """
+        初始化对象
+        :param base_url: 用于构造图片完整路径使用，图片服务器的域名
+        :param client_conf: FastDFS客户端配置文件的路径
+        """
+        # if base_url is None:
+        #     base_url = settings.FASTDFS_URL
+        # self.base_url = base_url
+        #
+        # if client_conf is None:
+        #     client_conf = settings.FASTDFS_CLIENT_CONF
+        # self.client_conf = client_conf
+
+        self.base_url = base_url or settings.FASTDFS_URL  # 技巧通过or来省去if的判断
+        self.client_conf = client_conf or settings.FASTDFS_CLIENT_CONF
+
+    def _open(self, name, mode='rb'):
+        """
+        存储系统打开文件存储的文件时调用此方法，因为我们自定义文件存储系统类，只是为了修改上传的目的，不需要打开，所以重写方法，什么也不做pass
+        :param name: 打开文件的文件名
+        :param mode: 打开文件的模式
+        :return:
+        """
+        pass
+
+    def _save(self, name, content):
+        """
+        上传文件时会调用此方法,重写此方法的目的,就是让文件上传到远程FastDFS服务器中
+        :param name: 要上传的文件名
+        :param content: 要上传的File对象 将来需要content.read() 文件二进制读取出并上传
+        :return: 保存到数据库中的FastDFS的文件名
+        """
+        # 创建fastDFS客户端对象，指定fdfs客户端配置文件所在路径
+        # client = Fdfs_client('/root/src/www/QmpythonBlog/util/fastdfs/client.conf')
+        # client = Fdfs_client(settings.FASTDFS_CLIENT_CONF)
+        client = Fdfs_client(self.client_conf)
+        # 上传文件
+        # client.upload_by_filename() # 如果有要上传文件的绝对路径才能使用此方法进行上传图片，并且用此方法上传的图片会有文件后缀
+        # 如果要上传的是文件数据二进制数据流，可以用此方法上传文件，并且上传后没有后缀
+        ret = client.upload_by_buffer(content.read())
+
+        # 判断文件是否上传成功
+        if ret.get('Status') != 'Upload successed.':
+            # 返回失败
+            raise Exception('Upload file failed')
+
+        # 获取返回的文件ID
+        file_id = ret.get('Remote file_id')  # 获取字典中的file_id
+
+        return file_id
+
+    def exists(self, name):
+        """
+        每次进行上传文件之前就会先调用此方法进行判断,当前要上传的文件是否已经在stroage服务器,如果在就不要上传了。
+        FastDFS可以自行解决文件的重名问题，所以此处返回False，告诉Django上传的都是新文件
+        :param name:   要进行判断是否上传的那个文件名
+        :return: (文件已存在,不上传了) / False(文件不存在,可以上传)
+        """
+        return False
+
+
+    def url(self, name):
+        """
+        当需要下载Storage服务器的文件时，就会调用此方法拼接出文件完整的下载路径
+        :param name: 要下载的文件file_id
+        :return: Storage服务器ip:端口 + file_id
+        """
+        return self.base_url + name
+~~~
+
+
+
+# python学习之美多商城(十四):商品部分:CKEditor富文本编辑器在Django中的使用、添加项目测试数据
+
+## 一、CKEditor富文本编辑器
+
+在运营后台，运营人员需要录入商品并编辑商品的详情信息，而商品的详情信息不是普通的文本，可以是包含了HTML语法格式的字符串。为了快速简单的让用户能够在页面中编辑带格式的文本，我们引入富文本编辑器。富文本即具备丰富样式格式的文本。
+
+我们使用功能强大的CKEditor富文本编辑器。
+
+![1561444038320](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1561444038320.png)
+
+### 1. 安装
+
+~~~
+pip install django-ckeditor
+~~~
+
+### 2. 添加应用
+
+~~~python
+NSTALLED_APPS = [
+    ...
+    'ckeditor',  # 富文本编辑器
+    'ckeditor_uploader',  # 富文本编辑器上传图片模块
+    ...
+]
+~~~
+
+### 3. 添加CKEditor设置
+
+在settings/dev.py中添加：
+
+~~~python
+# 富文本编辑器ckeditor配置
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',  # 完整工具条
+        'height': 300,  # 编辑高度
+        # 'woidth': 300, # 编辑宽度
+    },
+}
+CKEDITOR_UPLOAD_PATH = ''   # 上传图片保存路径,使用了fastDFS,设置为''
+~~~
+
+### 4. 添加ckeditor路由
+
+在总路由中添加：
+
+~~~python
+urlpatterns = [
+    ...
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+]
+~~~
+
+### 5. 为模型类添加字段
+
+ckeditor提供了两种类型的Django模型类字段
+
+- ckeditor.fields.RichTextField 不支持上传文件的富文本字段
+- ckeditor_uploader.fields.RichTextUploadingField 支持上传文件的富文本字段
+
+在商品模型类(SPU)中,需要保存商品的详细介绍、包装信息、售后服务，这三个字段需要作为富文本字段。
+
+~~~python
+class Goods(BaseModel):
+    """
+    商品SPU
+    """
+	...
+	desc_detail = RichTextUploadingField(default='', verbose_name='详细介绍')
+	desc_pack = RichTextField(default='', verbose_name='包装信息')
+	desc_service = RichTextUploadingField(default='', verbose_name='售后服务')
+	    ...
+~~~
+
+重新提交数据库：
+
+~~~
+python manage.py makemigrations
+python manage.py migrate
+~~~
+
+### 6. 修改Bug
+
+我们将通过Django上传的图片保存到了FastDFS中，而保存在FastDFS中的文件名没有后缀名，ckeditor在处理上传后的文件名按照有后缀名来处理，所以会出现bug错误。
+
+![1561445430299](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1561445430299.png)
+
+解决办法：找到虚拟环境目录中的ckeditor_uploader/views.py文件，如
+
+~~~
+~/.virtualenvs/meiduo/lib/python3.5/site-packages/ckeditor_uploader/views.py
+~~~
+
+![1561445817418](C:\Users\44801\AppData\Roaming\Typora\typora-user-images\1561445817418.png)
+
+
+
+## 二、将模型添加到admin
+
+在应用的`admin.py`中注册
+
+~~~
+from django.contrib import admin
+from .models import Content, ContentCategory
+
+# Register your models here.
+admin.site.register(ContentCategory)
+admin.site.register(Content)
+
+~~~
+
+修改app显示名称：
+
+![img](https://upload-images.jianshu.io/upload_images/9286065-9ed741481fe70d7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/333/format/webp)
+
+所有跟app相关的内容配置，可以实现一个`Appconfig`类的子类来完成，django一般会默认在`apps.py`中建立一个。然后在apps.py对应的子类中配置verbose_name
+
+~~~python
+from django.apps import AppConfig
+
+class ContentsConfig(AppConfig):
+    name = 'contents'
+    verbose_name = '广告内容'
+
+~~~
+
+再指定一下即可，需要管理的`__init__.py`中配置如下：
+
+~~~python
+from .apps import *
+default_app_config = 'contents.apps.ContentsConfig'
+~~~
+
+添加测试数据：
+
+~~~
+# mysql -h数据库ip地址 -u数据库用户名 -p数据库密码 数据库 < sql文件
+mysql -h127.0.0.1 -umeiduo -pmeiduo meiduo_mall < goods_data.sql
+~~~
 
