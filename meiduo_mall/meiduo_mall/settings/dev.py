@@ -15,7 +15,21 @@ import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+#print(os.path.dirname(os.path.abspath(__file__))) # /root/src/www/MeiduoShopping/meiduo_mall/meiduo_mall/settings
+
+#print(BASE_DIR) # /root/src/www/MeiduoShopping/meiduo_mall/meiduo_mall
+
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))  # 给项目追加导包路径
+
+# __file__表示了当前文件的path
+# os.path.abspath 返回目录的绝对路径
+# os.path.dirname 去掉文件名，返回目录,多个dirname嵌套可以返回上上级目录
+# os.path.join 拼接路径
+
+
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -44,7 +58,11 @@ INSTALLED_APPS = [
     'oauth',
     'goods',
     'contents',
+    'ckeditor',  # 富文本编辑器
+    'ckeditor_uploader',  # 富文本编辑器上传图片模块
     'corsheaders',  # CORS跨域问题
+    'django_crontab',  # 定时任务
+    'haystack',  # 全文检索框架
 ]
 
 
@@ -75,7 +93,7 @@ ROOT_URLCONF = 'meiduo_mall.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(os.path.dirname(BASE_DIR), 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,6 +105,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'meiduo_mall.wsgi.application'
 
@@ -227,14 +246,17 @@ LOGGING = {
 
 REST_FRAMEWORK = {
     # 异常处理
-    'EXCEPTION_HANDLER': 'meiduo_mall.utils.exceptions.exception_handler',
+    'EXCEPTION_HANDLER': 'utils.exceptions.exception_handler',
         # 身份验证
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication', # 添加jwt验证类
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    # 分页，全局使用自定义的分页配置
+    'DEFAULT_PAGINATION_CLASS': 'utils.pagination.StandardResultsSetPagination',
 }
+
 
 import datetime
 JWT_AUTH = {
@@ -314,3 +336,56 @@ QQ_REDIRECT_URI = 'http://www.qmpython.com:8001/qq_oauth_callback.html'
 
 # 第三方应用授权后，进行账号绑定的时间
 SAVE_APP_USER_TOKEN_EXPIRES = 600
+
+
+# FastDFS地址
+FASTDFS_URL = 'http://www.qmpython.com:8888/'
+# 设置客户端配置文件路径
+FASTDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')      # '/root/src/www/MeiduoShopping/meiduo_mall/utils/fastdfs/client.conf'
+
+# 设置django文件存储类，调用我们自定义的。
+DEFAULT_FILE_STORAGE = 'utils.fastdfs.fdfs_storage.FastDFSStorage'
+
+# 富文本编辑器ckeditor配置
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',  # 完整工具条
+        'height': 300,  # 编辑高度
+        # 'woidth': 300, # 编辑宽度
+    },
+}
+CKEDITOR_UPLOAD_PATH = ''   # 上传图片保存路径,使用了fastDFS,设置为''
+
+
+# 生成静态html文件保存目录
+GENERATED_STATIC_HTML_FILES_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
+
+# print(GENERATED_STATIC_HTML_FILES_DIR)
+
+# 定时任务
+CRONJOBS = [
+    # 每5分钟执行一次生成主页静态文件
+    ('*/5 * * * *', 'contents.crons.generate_static_index_html', '>> /root/src/www/MeiduoShopping/meiduo_mall/logs/crontab.log')
+]
+
+# 解决crontab中文问题
+CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
+
+
+
+# Haystack
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:8002/',  # 此处为elasticsearch运行的服务器ip地址，端口号默认为9200,配置文件修改为8002了。
+        'INDEX_NAME': 'meiduo_index',  # 指定elasticsearch建立的索引库的名称
+    },
+}
+
+# 当添加、修改、删除数据时，自动生成索引
+# 保证了在Django运行起来后，有新的数据产生时，haystack仍然可以让Elasticsearch实时生成新数据的索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# 设置每页显示的数据量
+#HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5

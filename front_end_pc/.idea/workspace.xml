@@ -2,11 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4371bdc-8085-4cc9-8d51-d582ee2fe524" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../meiduo_mall/contents/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../meiduo_mall/goods/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/celery_tasks/html/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/celery_tasks/html/tasks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/contents/crons.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/goods/search_indexes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/goods/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/goods/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/goods/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/goods/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/templates/search/indexes/goods/sku_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/templates/static_index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/templates/static_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../meiduo_mall/utils/pagination.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index-before.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.html" beforeDir="false" afterPath="$PROJECT_DIR$/test.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../meiduo_mall/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/contents/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/contents/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/contents/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/contents/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/contents/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/contents/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/goods/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/goods/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/goods/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/goods/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/goods/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/goods/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/goods/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/goods/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../meiduo_mall/meiduo_mall/settings/dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/meiduo_mall/settings/dev.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/meiduo_mall/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/meiduo_mall/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/meiduo_mall/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/meiduo_mall/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../meiduo_mall/utils/fastdfs/client.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../meiduo_mall/utils/fastdfs/client.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../项目文档整理/5-页面静态化与定时器.md" beforeDir="false" afterPath="$PROJECT_DIR$/../项目文档整理/5-页面静态化与定时器.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,11 +57,47 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/user_center_site.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="133" column="26" selection-start-line="133" selection-start-column="26" selection-end-line="133" selection-end-column="26" />
+            <state relative-caret-position="2414">
+              <caret line="142" column="81" selection-start-line="142" selection-start-column="81" selection-end-line="142" selection-end-column="81" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/list.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="28968">
+              <caret line="1704" column="41" selection-start-line="1704" selection-start-column="41" selection-end-line="1704" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/host.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="40" selection-start-column="40" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -88,11 +147,11 @@
       <find>form_address.place</find>
       <find>默认地址</find>
       <find>del_address</find>
-      <find>province_id</find>
       <find>editing_address_index</find>
       <find>is_show_edit</find>
       <find>show_edit</find>
       <find>save_address</find>
+      <find>goods_type_list clearfix</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -114,14 +173,15 @@
         <option value="$PROJECT_DIR$/user_center_info.html" />
         <option value="$PROJECT_DIR$/js/user_center_site.js" />
         <option value="$PROJECT_DIR$/user_center_site.html" />
+        <option value="$PROJECT_DIR$/test.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="652" />
-    <option name="y" value="291" />
-    <option name="width" value="1940" />
-    <option name="height" value="878" />
+    <option name="x" value="137" />
+    <option name="y" value="332" />
+    <option name="width" value="1943" />
+    <option name="height" value="658" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -192,16 +252,24 @@
       <workItem from="1561082552041" duration="4263000" />
       <workItem from="1561094685575" duration="14510000" />
       <workItem from="1561346028235" duration="644000" />
+      <workItem from="1561429560940" duration="1258000" />
+      <workItem from="1561439304460" duration="1578000" />
+      <workItem from="1561464074684" duration="1236000" />
+      <workItem from="1561474821476" duration="2154000" />
+      <workItem from="1561519641747" duration="2834000" />
+      <workItem from="1561554875636" duration="613000" />
+      <workItem from="1561602884521" duration="1231000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65184000" />
+    <option name="totallyTimeSpent" value="76088000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19571045" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21447721" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -213,7 +281,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="File Transfer" order="9" weight="0.2733711" />
+      <window_info anchor="bottom" id="File Transfer" order="9" visible="true" weight="0.2733711" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
@@ -230,13 +298,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/host.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="40" selection-start-column="40" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/register.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1224">
@@ -279,20 +340,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="2302" column="45" lean-forward="true" selection-start-line="2302" selection-start-column="45" selection-end-line="2302" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/login.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -307,6 +354,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index-before.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="623">
+          <caret line="2293" column="26" selection-start-line="2293" selection-start-column="26" selection-end-line="2293" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html" />
     <entry file="file://$PROJECT_DIR$/user_center_info.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1122">
@@ -321,6 +376,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/user_center_site.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2414">
+          <caret line="142" column="81" selection-start-line="142" selection-start-column="81" selection-end-line="142" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="28968">
+          <caret line="1704" column="41" selection-start-line="1704" selection-start-column="41" selection-end-line="1704" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/host.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="40" selection-start-column="40" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/user_center_site.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2142">
@@ -328,10 +411,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user_center_site.html">
+    <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="133" column="26" selection-start-line="133" selection-start-column="26" selection-end-line="133" selection-end-column="26" />
+        <state relative-caret-position="476">
+          <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
         </state>
       </provider>
     </entry>

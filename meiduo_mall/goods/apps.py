@@ -1,5 +1,7 @@
 from django.apps import AppConfig
 
 
-class UsersConfig(AppConfig):
-    name = 'contents'
+class GoodsConfig(AppConfig):
+    name = 'goods'
+    verbose_name = '商品内容'
+

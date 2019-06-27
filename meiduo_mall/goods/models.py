@@ -1,5 +1,8 @@
 from django.db import models
 
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
+
 from utils.models import BaseModel
 
 
@@ -70,9 +73,13 @@ class Goods(BaseModel):
     sales = models.IntegerField(default=0, verbose_name='销量')
     comments = models.IntegerField(default=0, verbose_name='评价数')
 
-    desc_detail = models.ImageField(default='', verbose_name='详细介绍')
-    desc_pack = models.ImageField(default='', verbose_name='包装信息')
-    desc_service = models.ImageField(default='', verbose_name='售后服务')
+    # desc_detail = models.ImageField(default='', verbose_name='详细介绍')
+    # desc_pack = models.ImageField(default='', verbose_name='包装信息')
+    # desc_service = models.ImageField(default='', verbose_name='售后服务')
+
+    desc_detail = RichTextUploadingField(default='', verbose_name='详细介绍')
+    desc_pack = RichTextField(default='', verbose_name='包装信息')
+    desc_service = RichTextUploadingField(default='', verbose_name='售后服务')
 
     class Meta:
         db_table = 'tb_goods'

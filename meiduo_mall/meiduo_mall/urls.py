@@ -21,13 +21,17 @@ from .views import TestView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('test/', TestView.as_view(), name='test'),
+    path('test/', TestView.as_view(), name='test'),
     path('users/', include('users.urls', namespace='users')),
     path('verifications/', include('verifications.urls', namespace='verifications')),
 
     path('areas/', include('areas.urls', namespace='areas')),
 
+    path('', include('goods.urls', namespace='goods')),
+
     # 第三方登录app
     path('oauth/', include('oauth.urls', namespace='oauth')),
 
+    #ckeditor富文本
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]

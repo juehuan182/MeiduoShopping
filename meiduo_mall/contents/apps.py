@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsersConfig(AppConfig):
-    name = 'users'
+class ContentsConfig(AppConfig):
+    name = 'contents'
+    verbose_name = '广告内容'
